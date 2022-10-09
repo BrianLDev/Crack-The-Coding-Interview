@@ -138,41 +138,62 @@ console.log(Compress('bookkeeper') === 'b1o2k2e2p1e1r1');
 
 
 // 1.7 Rotate Matrix: Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, write a method to rotate the image by 90 degrees. Can you do this in place?
+// NOTE - THE LEETCODE VERSION OF THIS JUST CHALLENGE SAYS EACH PIXEL/ELEMENT IS AN INTEGER, SO I'M IGNORING THE 4 BYTE NOTE.
 function Rotate(matrix) {
-  let bitSize = 4 * 8;
-  // TODO: FINISH THIS LATER
-}
-
-
-// 1.8 Zero Matrix: Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column are set to 0.
-function Zero(matrix) {
-  const M = matrix.length;
-  const N = matrix[0].length;
-  // check for any zeros.  If there are, then we simply create a zeros matrix and return it (since all rows and columns will be set to 0).
-  for (let i=0; i<M; i++) {
-    for (let j=0; j<N; j++) {
-      if (matrix[i][j] === 0) {
-        // zero found.  Create an array of zeros and return it
-        zeros = new Array(M);
-        for (let z=0; z<M; z++) {
-          zeros[z] = new Array(N).fill(0);
-        }
-        return zeros;
-      }
+  for(let i = 0; i < matrix.length; i++) {
+    for(let j = i; j < matrix[i].length; j++){
+        let temp = matrix[i][j]
+        matrix[i][j] = matrix[j][i]
+        matrix[j][i] = temp
     }
   }
-  return matrix;  // if no zeros found, simply return original matrix
+  for(let i = 0; i < matrix.length; i++){
+      matrix[i].reverse()
+  }
+  return matrix;
 }
-
-// note - this compare sub-function makes a simple brute force equality check for objects/arrays, since JS doesn't have a built-in equality check
+// note - this IsEqual sub-function makes a simple brute force equality check for objects/arrays, since JS doesn't have a built-in equality check
 function IsEqual(a, b) {
   return JSON.stringify(a) === JSON.stringify(b) ? true : false;
 }
+console.log("1.7 TESTS");
+console.log(IsEqual(Rotate([[1,2,3],[4,5,6],[7,8,9]]), [[7,4,1],[8,5,2],[9,6,3]]) === true);
+
+
+// 1.8 Zero Matrix: Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column are set to 0.
+// Note - the intent is to only make changes at the end after all zeros found, not update along the way.
+function SetZeros(matrix) {
+  const rows = new Set();     // track rows to zero out
+  const cols = new Set();     // track cols to zero out
+  const m = matrix.length;    // matrix row count
+  const n = matrix[0].length; // matrix col count
+  
+  // first, find all the zeros and fill the set of rows, cols to zero out
+  for(let i = 0; i < m; i++){
+    for(let j = 0; j < n; j++){
+      if(matrix[i][j] === 0){
+        rows.add(i);
+        cols.add(j);
+      }
+    }
+  }
+  // zero out any rows
+  rows.forEach(row => {
+      matrix[row] = new Array(n).fill(0)
+  });
+  // zero out any cols
+  cols.forEach(col => {
+    for(let i = 0; i < m; i++){
+      matrix[i][col] = 0;
+    }
+  });
+  return matrix;
+}
 
 console.log("1.8 TESTS");
-console.log(IsEqual(Zero([[1,2,3],[4,5,6],[7,8,9]]),  [[1,2,3],[4,5,6],[7,8,9]]) === true);
-console.log(IsEqual(Zero([[0,2,3],[4,5,6],[7,8,9]]),  [[0,0,0],[0,0,0],[0,0,0]]) === true);
-console.log(IsEqual(Zero([[1,2,3],[4,5,6],[7,8,0]]),  [[0,0,0],[0,0,0],[0,0,0]]) === true);
+console.log(IsEqual(SetZeros([[1,2,3],[4,5,6],[7,8,9]]),  [[1,2,3],[4,5,6],[7,8,9]]) === true);
+console.log(IsEqual(SetZeros([[0,2,3],[4,5,6],[7,8,9]]),  [[0,0,0],[0,5,6],[0,8,9]]) === true);
+console.log(IsEqual(SetZeros([[0,2,3],[4,0,6],[7,8,0]]),  [[0,0,0],[0,0,0],[0,0,0]]) === true);
 
 
 // 1.9 String Rotation: Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring (e.g.,"waterbottle" is a rotation of "erbottlewat").
