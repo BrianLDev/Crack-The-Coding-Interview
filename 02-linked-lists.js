@@ -47,15 +47,93 @@ class LinkedList {
       }
     }
   }
+
+  print() {
+    let node = this.head;
+    while (node !== null) {
+      console.log(node.data);
+      node = node.next;
+    }
+  }
 }
 
+
+// INTERVIEW QUESTION PROBLEMS
+
 // 2.1 Remove Dups! Write code to remove duplicates from an unsorted linked list.  FOLLOW UP:  How would you solve this problem if a temporary buffer is not allowed? Hints: #9, #40
+LinkedList.prototype.removeDups = function() {
+  console.log('removing dups...');
+  let node = this.head;
+  let dataset = new Set();  // set to track all first occurrances of data
+  while (node !== null) {
+    // check if data already in set, delete if it is
+    if (dataset.has(node.data)) {
+      console.log('deleting ' + node.data)
+      this.delete(node.data); 
+    }
+    else {
+      dataset.add(node.data);
+    }
+    node = node.next;
+  }
+}
+
+console.log("*** 2.1 TESTS ***");
+let ll = new LinkedList();
+ll.append(1); ll.append(1);
+ll.append(2); ll.append(2);
+ll.append(3); ll.append(3);
+ll.removeDups();
+ll.print();
 
 
 // 2.2 Return Kth to Last: Implement an algorithm to find the kth to last element of a singly linked list.
+LinkedList.prototype.returnKthToLast = function(k) {
+  if (k >= this.size || k < 0)
+    return null;
+  const target = this.size - k;
+  let node = this.head;
+  for (let i=1; i<target; i++) {
+    node = node.next;
+  }
+  return node.data;
+}
 
+console.log("*** 2.2 TESTS ***");
+ll = new LinkedList();
+ll.append(1);
+ll.append(2);
+ll.append(3);
+console.log(ll.returnKthToLast(4) === null);
+console.log(ll.returnKthToLast(3) === null);
+console.log(ll.returnKthToLast(2) === 1);
+console.log(ll.returnKthToLast(1) === 2);
+console.log(ll.returnKthToLast(0) === 3);
 
-// 2.3 Delete Middle Node: Implement an algorithm to delete a node in the middle (i.e., any node but the first and last node, not necessarily the exact middle) of a singly linked list, given only access to that node.  EXAMPLE:  Input:the node c from the linked lista->b->c->d->e->f.  Result: nothing is returned, but the new linked list looks likea->b->d->e- >f.
+// 2.3 Delete Middle Node: Implement an algorithm to delete a node in the middle (i.e., any node but the first and last node, not necessarily the exact middle) of a singly linked list, given only access to that node.  EXAMPLE:  Input:the node c from the linked list a->b->c->d->e->f.  Result: nothing is returned, but the new linked list looks like a->b->d->e->f.
+LinkedList.prototype.deleteMiddle = function() {
+  let mid = Math.floor(this.size / 2);
+  let node = this.head;
+  for (let i=1; i<mid; i++) {
+    node = node.next;
+  }
+  node.next = node.next.next;
+  this.size -= 1;
+}
+
+console.log("*** 2.3 TESTS ***");
+ll = new LinkedList();
+ll.append(1);
+ll.append(2);
+ll.append(3);
+ll.append(4);
+ll.append(5);
+ll.append(6);
+ll.deleteMiddle();
+ll.print();
+console.log('...');
+ll.deleteMiddle();
+ll.print();
 
 
 // 2.4 Partition: Write code to partition a linked list around a value x, such that all nodes less than x come before all nodes greater than or equal to x. If x is contained within the list, the values of x only need to be after the elements less than x (see below). The partition element x can appear anywhere in the "right partition"; it does not need to appear between the left and right partitions.
