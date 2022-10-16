@@ -63,9 +63,9 @@ class LinkedList {
 
 // INTERVIEW QUESTION PROBLEMS
 
-// 2.1 Remove Dups! Write code to remove duplicates from an unsorted linked list.  FOLLOW UP:  How would you solve this problem if a temporary buffer is not allowed? Hints: #9, #40
+// 2.1A Remove Dups! Write code to remove duplicates from an unsorted linked list.  FOLLOW UP:  How would you solve this problem if a temporary buffer is not allowed? Hints: #9, #40
 // Note - this version from the CTCI book is different from the LeetCode problem, and doesn't require you to also delete the original when a dup is found.
-LinkedList.prototype.removeDups = function() {
+LinkedList.prototype.removeDupsA = function() {
   let tracker = new Set();  // set to track all first occurrances of data
   let node = this.head;
   // iterate through all nodes except head
@@ -73,6 +73,7 @@ LinkedList.prototype.removeDups = function() {
     // check if data already in set, delete if it is
     if (tracker.has(node.next.data)) {
       node.next = node.next.next;
+      this.size -= 1;
     }
     else {
       tracker.add(node.next.data);
@@ -82,15 +83,60 @@ LinkedList.prototype.removeDups = function() {
   // lastly, check head
   if (tracker.has(this.head.data)) {
     this.head = this.head.next;
+    this.size -= 1;
   }
 }
 
-console.log("*** 2.1 TESTS ***");
+console.log("*** 2.1A TESTS ***");
 let ll = new LinkedList();
 ll.append(1); ll.append(1);
 ll.append(2); ll.append(2);
 ll.append(3); ll.append(3);
-ll.removeDups();
+ll.removeDupsA();
+ll.print();
+
+// 2.1B - LeetCode version where you delete any dups including the original
+// https://leetcode.com/problems/remove-duplicates-from-an-unsorted-linked-list/
+LinkedList.prototype.removeDupsB = function() {
+  let tracker = new Map();  // map to count all occurrances of data
+  let node = this.head;
+  // first get counts of all items
+  while (node) {
+    let data = node.data;
+    if (tracker.has(data)) {
+      tracker.set(data, tracker.get(data)+1);
+    }
+    else {
+      tracker.set(data, 1);
+    }
+    node = node.next;
+  }
+  // next, iterate through all nodes (except head) and delete any that have a count > 1
+  node = this.head;
+  while (node.next) {
+    let data = node.next.data;
+    if (tracker.get(data) > 1) {
+      node.next = node.next.next;
+      this.size -= 1;
+    }
+    else {
+      node = node.next;
+    }
+  }
+  // lastly, check head
+  if (tracker.get(this.head.data) > 1) {
+    this.head = this.head.next;
+    this.size -= 1;
+  }
+}
+
+console.log("*** 2.1B TESTS ***");
+ll = new LinkedList();
+ll.append(1);
+ll.append(2);
+ll.append(3);
+ll.append(2);
+ll.removeDupsB();
 ll.print();
 
 
