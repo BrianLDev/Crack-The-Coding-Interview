@@ -1,5 +1,8 @@
 // CHAPTER 2: LINKED LISTS
 
+// Link to LeetCode versions of these challenges:
+// https://leetcode.com/discuss/general-discussion/1152824/cracking-the-coding-interview-6th-edition-in-leetcode
+
 // CLASSES FOR CH 2 EXAMPLES - SINGLY LINKED LIST
 class Node {
   constructor(data) {
@@ -61,20 +64,24 @@ class LinkedList {
 // INTERVIEW QUESTION PROBLEMS
 
 // 2.1 Remove Dups! Write code to remove duplicates from an unsorted linked list.  FOLLOW UP:  How would you solve this problem if a temporary buffer is not allowed? Hints: #9, #40
+// Note - this version from the CTCI book is different from the LeetCode problem, and doesn't require you to also delete the original when a dup is found.
 LinkedList.prototype.removeDups = function() {
-  console.log('removing dups...');
+  let tracker = new Set();  // set to track all first occurrances of data
   let node = this.head;
-  let dataset = new Set();  // set to track all first occurrances of data
-  while (node !== null) {
+  // iterate through all nodes except head
+  while (node.next) {
     // check if data already in set, delete if it is
-    if (dataset.has(node.data)) {
-      console.log('deleting ' + node.data)
-      this.delete(node.data); 
+    if (tracker.has(node.next.data)) {
+      node.next = node.next.next;
     }
     else {
-      dataset.add(node.data);
+      tracker.add(node.next.data);
+      node = node.next;
     }
-    node = node.next;
+  }
+  // lastly, check head
+  if (tracker.has(this.head.data)) {
+    this.head = this.head.next;
   }
 }
 
