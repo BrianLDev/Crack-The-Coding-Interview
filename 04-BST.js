@@ -39,7 +39,7 @@ class BST {
 
   insert(key, parent=this.root) {
     let node = new NodeBT(key);
-    console.log("Inserting: " + node.key);
+    // console.log("Inserting: " + node.key);
     // first check root
     if (parent === null) {
       this.root = node;
@@ -107,9 +107,11 @@ class BST {
         succ.left = toDelete.left;
         succ.left.parent = succ;
       }
+      console.log(toDelete.key + " successfully deleted.");
+      toDelete = null;
     }
     else {
-      console.log("Cannot delete " + key + ", node not found.");
+      console.log("Cannot delete " + key + ", key not found.");
     }
   }
 
@@ -185,5 +187,9 @@ k = 5; s = bst.search(k);  if(s !== null) { console.log(s.key)} else { console.l
 k = 9; s = bst.search(k);  if(s !== null) { console.log(s.key)} else { console.log(k + " not found.") }
 k = 999; s = bst.search(k);  if(s !== null) { console.log(s.key)} else { console.log(k + " not found.") }
 console.log("--- Delete ---");
+console.log("Deleting 8, 2, 5, 999")
 bst.delete(8);
+bst.delete(2);
+bst.delete(5);
+bst.delete(999);
 bst.traverseInOrder();
