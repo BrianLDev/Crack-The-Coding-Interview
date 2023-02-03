@@ -35,6 +35,41 @@ var sortedArrayToBST = function(nums) {
 };
 
 // 4.3 List of Depths: Given a binary tree, design an algorithm which creates a linked list of all the nodes at each depth (e.g., if you have a tree with depth D, you'll have D linked lists).
+// LEETCODE VERSION DONE AS GROUP - https://leetcode.com/problems/binary-tree-level-order-traversal/ 
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+  const result = [];
+
+  if (!root) return result;
+  const queue = [[root, 0]];
+
+  while (queue.length > 0) {
+      const [node, level] = queue.shift();
+
+      if (!result[level])
+          result[level] = [];
+
+      result[level].push(node.val);
+
+      if (node.left)
+          queue.push([node.left, level + 1]);
+      if (node.right)
+          queue.push([node.right, level + 1]);
+  }
+
+  return result;
+};
 
 
 // 4.4 Check Balanced: Implement a function to check if a binary tree is balanced. For the purposes of this question, a balanced tree is defined to be a tree such that the heights of the two subtrees of any node never differ by more than one.
