@@ -74,6 +74,37 @@ var levelOrder = function(root) {
 
 // 4.4 Check Balanced: Implement a function to check if a binary tree is balanced. For the purposes of this question, a balanced tree is defined to be a tree such that the heights of the two subtrees of any node never differ by more than one.
 
+// LEETCODE VERSION - https://leetcode.com/problems/balanced-binary-tree/
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+
+var isBalanced = function(root) {
+  // NOTE - all subtrees must also be balanced, so simply comparing heights l vs r won't work
+  return getHeightIfBalanced(root) !== null;
+};
+
+var getHeightIfBalanced = function(node) {
+  if (node === null)
+    return 0;
+
+  const l = getHeightIfBalanced(node.left);
+  const r = getHeightIfBalanced(node.right);
+  if (l === null || r === null || Math.abs(l-r) > 1)
+    return null;
+  else
+    return 1 + Math.max(l,r);
+}
+
 
 // 4.5 Validate BST: Implement a function to check if a binary tree is a binary search tree.
 
