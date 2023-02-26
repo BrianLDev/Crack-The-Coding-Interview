@@ -107,7 +107,29 @@ var getHeightIfBalanced = function(node) {
 
 
 // 4.5 Validate BST: Implement a function to check if a binary tree is a binary search tree.
+// LEETCODE VERSION - https://leetcode.com/problems/validate-binary-search-tree/description/
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+function isValidBST(root) {
+  return checkBST(root);
+}
 
+function checkBST(parent, min=-Infinity, max=Infinity) {
+  if (!parent) return true;
+  if (parent.val <= min) return false;
+  if (parent.val >= max) return false;
+  return checkBST(parent.left, min, parent.val) && checkBST(parent.right, parent.val, max);
+}
 
 // 4.6 Successor: Write an algorithm to find the "next" node (i.e., in-order successor) of a given node in a binary search tree. You may assume that each node has a link to its parent.
 
