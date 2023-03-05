@@ -132,21 +132,85 @@ function checkBST(parent, min=-Infinity, max=Infinity) {
 }
 
 // 4.6 Successor: Write an algorithm to find the "next" node (i.e., in-order successor) of a given node in a binary search tree. You may assume that each node has a link to its parent.
+// LEETCODE VERSION (REQUIRES PREMIUM) - https://leetcode.com/problems/inorder-successor-in-bst-ii/
 
 
 // 4.7 Build Order: You are given a list of projects and a list of dependencies (which is a list of pairs of projects, where the second project is dependent on the first project). All of a project's dependencies must be built before the project is. Find a build order that will allow the projects to be built. If there is no valid build order, return an error.
+// LEETCODE VERSION - https://leetcode.com/problems/course-schedule-ii/
 
 
 // 4.8 First Common Ancestor: Design an algorithm and write code to find the first common ancestor of two nodes in a binary tree. Avoid storing additional nodes in a data structure. NOTE: This is not necessarily a binary search tree.
+// LEETCODE VERSION - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {TreeNode}
+ */
+var lowestCommonAncestor = function(root, p, q) {
+  const parents = [];
+  const queue = [root];
+  parents[root.val] = null;
 
+  while (queue.length > 0) {
+      const node = queue.shift();
+      if (node.left) {
+          parents[node.left.val] = node;
+          queue.push(node.left);
+      }
+      if (node.right) {
+          parents[node.right.val] = node;
+          queue.push(node.right);
+      }
+  }
+
+  let ancestorP = [];
+  let ancestorQ = [];
+  let node = p;
+  while (node != null) {
+      ancestorP.push(node);
+      node = parents[node.val];
+  }
+  node = q;
+  while (node != null) {
+      ancestorQ.push(node);
+      node = parents[node.val];
+  }
+
+  if (ancestorP.length > ancestorQ.length) {
+      [ancestorP, ancestorQ] = [ancestorQ, ancestorP];
+  }
+
+  for (let i = 1; i <= ancestorP.length; i++) {
+      const pNode = ancestorP[ancestorP.length - i];
+      const qNode = ancestorQ[ancestorQ.length - i];
+      console.log(pNode.val, qNode.val);
+      if (pNode.val != qNode.val) {
+          return ancestorP[ancestorP.length - i + 1]
+      }
+  }
+
+  return ancestorP[0];
+};
 
 // 4.9 BST Sequences: A binary search tree was created by traversing through an array from left to right and inserting each element. Given a binary search tree with distinct elements, print all possible arrays that could have led to this tree.
+// LEETCODE VERSION - https://leetcode.com/problems/number-of-ways-to-reorder-array-to-get-same-bst/ 
 
 
 // 4.10 Check Subtree: T1 and T2 are two very large binary trees, with T1 much bigger than T2. Create an algorithm to determine if T2 is a subtree of T1.  A tree T2 is a subtree of T1 if there exists a node n in T1 such that the subtree of n is identical to T2. That is, if you cut off the tree at node n, the two trees would be identical.
+// LEETCODE VERSION - https://leetcode.com/problems/subtree-of-another-tree/ 
 
 
 // 4.11 You are implementing a binary tree class from scratch which, in addition to insert, find, and delete, has a method getRandomNode() which returns a random node from the tree. All nodes should be equally likely to be chosen. Design and implement an algorithm for getRandomNode, and explain how you would implement the rest of the methods.
+// LEETCODE VERSION - NOT AVAILABLE
 
 
 // 4.12 You are given a binary tree in which each node contains an integer value (which might be positive or negative). Design an algorithm to count the number of paths that sum to a given value. The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).
+// LEETCODE VERSION - https://leetcode.com/problems/path-sum-iii/description/ 
