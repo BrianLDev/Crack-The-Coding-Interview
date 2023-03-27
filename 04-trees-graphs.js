@@ -200,9 +200,50 @@ var lowestCommonAncestor = function(root, p, q) {
   return ancestorP[0];
 };
 
+// Alternative, super efficient version of Lowest Common Ancestor found on LeetCode discussion.
+// Study and understand it for future reference
+function lowestCommonAncestor(root, p, q) {
+  if (!root || root === p || root === q) return root;
+  var resL = lowestCommonAncestor(root.left, p, q);
+  var resR = lowestCommonAncestor(root.right, p, q);
+  return (resL && resR) ? root : (resL || resR);
+}
+
+
 // 4.9 BST Sequences: A binary search tree was created by traversing through an array from left to right and inserting each element. Given a binary search tree with distinct elements, print all possible arrays that could have led to this tree.
 // LEETCODE VERSION - https://leetcode.com/problems/number-of-ways-to-reorder-array-to-get-same-bst/ 
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+function factorial (n) {
+  if (n==0 || n==1)
+    return 1n;
+  let subtotal = 1n
+  for (let i = 1n; i<=n; i++) {
+    subtotal *= i;
+  }
+  return subtotal;
+}
 
+function combination(n, r) {
+  num = factorial(n);
+  denom = factorial(r) * factorial(n-r);
+  return num/denom;
+}
+
+function numOfWays(nums) {
+  function f(nums) {
+    if (nums.length <= 2)
+      return 1n;
+    const left = nums.filter(n => n < nums[0]);
+    const right = nums.filter(n => n > nums[0]);
+    const n = left.length + right.length;
+    const r = right.length; // could also to left.length
+    return combination(n, r) * f(left) * f(right);
+  }
+  return (f(nums)-1n) % ((10n**9n)+7n)
+}
 
 // 4.10 Check Subtree: T1 and T2 are two very large binary trees, with T1 much bigger than T2. Create an algorithm to determine if T2 is a subtree of T1.  A tree T2 is a subtree of T1 if there exists a node n in T1 such that the subtree of n is identical to T2. That is, if you cut off the tree at node n, the two trees would be identical.
 // LEETCODE VERSION - https://leetcode.com/problems/subtree-of-another-tree/ 
