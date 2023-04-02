@@ -247,6 +247,58 @@ function numOfWays(nums) {
 
 // 4.10 Check Subtree: T1 and T2 are two very large binary trees, with T1 much bigger than T2. Create an algorithm to determine if T2 is a subtree of T1.  A tree T2 is a subtree of T1 if there exists a node n in T1 such that the subtree of n is identical to T2. That is, if you cut off the tree at node n, the two trees would be identical.
 // LEETCODE VERSION - https://leetcode.com/problems/subtree-of-another-tree/ 
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} subRoot
+ * @return {boolean}
+ */
+function isSubtree(root, subRoot) {
+  if (root === null || root === undefined || subRoot === null || subRoot === undefined)
+      return false;
+  if (inOrderTraversal(root, subRoot) === true)
+      return true;
+  else
+      return false;
+};
+
+function inOrderTraversal(node, subRoot) {
+  if (node !== null) {
+      const left = inOrderTraversal(node.left, subRoot);
+      if (node.val === subRoot.val)
+          if (compareTrees(node, subRoot) === true)
+              return true;
+      const right = inOrderTraversal(node.right, subRoot);
+      return (left || right);
+  }
+}
+
+function compareTrees(rootA, rootB) {
+  let queue = [rootA, rootB]
+  while (queue.length > 0) {
+      const nodeA = queue.shift();
+      const nodeB = queue.shift();
+      if (nodeA === null || nodeB === null) { return false; }
+      if (nodeA.val !== nodeB.val) { return false; }
+      if (nodeA.left || nodeB.left) {
+          queue.push(nodeA.left);
+          queue.push(nodeB.left);
+      }
+      if (nodeA.right || nodeB.right) {
+          queue.push(nodeA.right);
+          queue.push(nodeB.right);
+      }
+  }
+  // reached end and all nodes matched, return true
+  return true;
+}
 
 
 // 4.11 You are implementing a binary tree class from scratch which, in addition to insert, find, and delete, has a method getRandomNode() which returns a random node from the tree. All nodes should be equally likely to be chosen. Design and implement an algorithm for getRandomNode, and explain how you would implement the rest of the methods.
