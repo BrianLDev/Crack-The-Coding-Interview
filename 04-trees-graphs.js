@@ -5,7 +5,38 @@
 
 
 // 4.1 Route Between Nodes: Given a directed graph, design an algorithm to find out whether there is a route between two nodes.
-
+function validPath (n, edges, source, destination) {
+  // make an adjacency list
+  const list = new Map();
+  edges.forEach ((edge) => {
+      const [left, right] = edge;
+      if (!list.has(left)) {
+          list.set(left, []);
+      }
+      if (!list.has(right)) {
+          list.set(right, []);
+      }
+      list.get(left).push(right);
+      list.get(right).push(left);
+  })
+  // create a visited set
+  const visited = new Set();
+  // create a queue
+  const queue = [source];
+  // traverse the adjacency list
+  while (queue.length > 0) {
+      const node = queue.shift();
+      if (visited.has(node))
+        continue;
+      if (node === destination)
+        return true;
+      visited.add(node)
+      list.get(node).forEach((neighbor) => {
+          queue.push(neighbor);
+      })
+  }
+  return false;
+};
 
 // 4.2 Minimal Tree: Given a sorted (increasing order) array with unique integer elements, write an algo­ rithm to create a binary search tree with minimal height.
 
